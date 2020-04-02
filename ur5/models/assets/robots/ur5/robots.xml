@@ -30,7 +30,7 @@
     </asset>
 
     <worldbody>
-        <body name="link0" pos="0 0 0" quat="0.3826834324 0 0 0.9238795325">
+        <body name="link0" pos="0 0 0">
             <body name="base" pos="0 0 0">
                 <inertial diaginertia="0 0 0" mass="0" pos="0 0 0"/>
                 <body name="controller_box" pos="0 0 0">
@@ -52,7 +52,7 @@
                 </body>
             </body>
 
-            <inertial pos="0 0 0" mass="4" diaginertia="0.4 0.4 0.4" />
+            <inertial pos="0 0 0.05" mass="4" diaginertia="0.4 0.4 0.4" />
             <geom type="mesh" contype="0" conaffinity="0" group="1" mesh="link0_vis" name="link0_visual" rgba="1 1 1 1"/>
             <geom type="mesh" group="0" mesh="link0" name="link0_collision"/>
             <body name="link1" pos="0 0 0.333">

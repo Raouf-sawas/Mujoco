@@ -28,28 +28,7 @@ class IKWrapper(Wrapper):
                 the end effector to the commanded targets.
         """
         super().__init__(env)
-        if self.env.mujoco_robot.name == "sawyer":
-            from ur5.controllers import SawyerIKController
-
-            self.controller = SawyerIKController(
-                bullet_data_path=os.path.join(ur5.models.assets_root, "bullet_data"),
-                robot_jpos_getter=self._robot_jpos_getter,
-            )
-        elif self.env.mujoco_robot.name == "panda":
-            from ur5.controllers import PandaIKController
-
-            self.controller = PandaIKController(
-                bullet_data_path=os.path.join(ur5.models.assets_root, "bullet_data"),
-                robot_jpos_getter=self._robot_jpos_getter,
-            )
-        elif self.env.mujoco_robot.name == "baxter":
-            from ur5.controllers import BaxterIKController
-
-            self.controller = BaxterIKController(
-                bullet_data_path=os.path.join(ur5.models.assets_root, "bullet_data"),
-                robot_jpos_getter=self._robot_jpos_getter,
-            )
-         elif self.env.mujoco_robot.name == "ur5":
+        if self.env.mujoco_robot.name == "ur5":
             from ur5.controllers import Ur5IKController
 
             self.controller = Ur5IKController(
@@ -58,7 +37,7 @@ class IKWrapper(Wrapper):
             )
         else:
             raise Exception(
-                "Only Sawyer, Panda, and Baxter robot environments are supported for IK "
+                "Only Sawyer, Ur5, and Baxter robot environments are supported for IK "
                 "control currently."
             )
 
@@ -102,17 +81,10 @@ class IKWrapper(Wrapper):
                 inputs (first right, then left).
         """
 
-        input_1 = self._make_input(action[:7], self.env._right_hand_quat)
-        if self.env.mujoco_robot.name == "sawyer":
+        input_1 = self._make_input(action[:6], self.env._right_hand_quat)
+        if self.env.mujoco_robot.name == "ur5":
             velocities = self.controller.get_control(**input_1)
-            low_action = np.concatenate([velocities, action[7:]])
-        elif self.env.mujoco_robot.name == "panda":
-            velocities = self.controller.get_control(**input_1)
-            low_action = np.concatenate([velocities, action[7:]])
-        elif self.env.mujoco_robot.name == "baxter":
-            input_2 = self._make_input(action[7:14], self.env._left_hand_quat)
-            velocities = self.controller.get_control(input_1, input_2)
-            low_action = np.concatenate([velocities, action[14:]])
+            low_action = np.concatenate([velocities, action[6:]])
         else:
             raise Exception(
                 "Only Sawyer, Panda, and Baxter robot environments are supported for IK "
@@ -124,12 +96,8 @@ class IKWrapper(Wrapper):
             ret = self.env.step(low_action)
             if i + 1 < self.action_repeat:
                 velocities = self.controller.get_control()
-                if self.env.mujoco_robot.name == "sawyer":
-                    low_action = np.concatenate([velocities, action[7:]])
-                elif self.env.mujoco_robot.name == "panda":
-                    low_action = np.concatenate([velocities, action[7:]])
-                elif self.env.mujoco_robot.name == "baxter":
-                    low_action = np.concatenate([velocities, action[14:]])
+                if self.env.mujoco_robot.name == "ur5":
+                    low_action = np.concatenate([velocities, action[6:]])
                 else:
                     raise Exception(
                         "Only Sawyer, Panda, and Baxter robot environments are supported for IK "
@@ -147,5 +115,5 @@ class IKWrapper(Wrapper):
         return {
             "dpos": action[:3],
             # IK controller takes an absolute orientation in robot base frame
-            "rotation": T.quat2mat(T.quat_multiply(old_quat, action[3:7])),
+            "rotation": T.quat2mat(T.quat_multiply(old_quat, action[3:6])),
         }

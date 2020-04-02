@@ -1,1 +1,1 @@
-recursive-include robosuite/models/assets/ *
+recursive-include ur5/models/assets/ *
