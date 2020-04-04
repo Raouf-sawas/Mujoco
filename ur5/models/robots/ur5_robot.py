@@ -14,14 +14,14 @@ class Ur5(Robot):
         self._model_name = "ur5"
         # Careful of init_qpos -- certain init poses cause ik controller to go unstable (e.g: pi/4 instead of -pi/4
         # for the final joint angle)
-        self._init_qpos = np.array([0, np.pi / 16.0, 0.00, -np.pi / 2.0 - np.pi / 3.0, 0.00, np.pi - 0.2])
+        self._init_qpos = np.array([np.pi / 3, np.pi / 16.0, 0.00, -np.pi / 2.0 - np.pi / 3.0, 0.00, np.pi - 0.2])
 
     def set_base_xpos(self, pos):
         """Places the robot on position @pos."""
         node = self.worldbody.find("./body[@name='link0']")
         node.set("pos", array_to_string(pos - self.bottom_offset))
 
-    def set_joint_damping(self, damping=np.array((0.1, 0.1, 0.1, 0.1, 0.1, 0.01))):
+    def set_joint_damping(self, damping=np.array((1, 1, 1, 1,1, 1))):
         """Set joint damping """
         body = self._base_body
         for i in range(len(self._link_body)):
@@ -29,7 +29,7 @@ class Ur5(Robot):
             joint = body.find("./joint[@name='{}']".format(self._joints[i]))
             joint.set("damping", array_to_string(np.array([damping[i]])))
 
-    def set_joint_frictionloss(self, friction=np.array(( 0.1, 0.1, 0.1, 0.1, 0.01, 0.01))):
+    def set_joint_frictionloss(self, friction=np.array(( 1, 1, 1, 1, 1, 1))):
         """Set joint friction loss (static friction)"""
         body = self._base_body
         for i in range(len(self._link_body)):

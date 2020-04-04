@@ -81,10 +81,10 @@ class IKWrapper(Wrapper):
                 inputs (first right, then left).
         """
 
-        input_1 = self._make_input(action[:6], self.env._right_hand_quat)
+        input_1 = self._make_input(action[:7], self.env._right_hand_quat)
         if self.env.mujoco_robot.name == "ur5":
             velocities = self.controller.get_control(**input_1)
-            low_action = np.concatenate([velocities, action[6:]])
+            low_action = np.concatenate([velocities, action[7:]])
         else:
             raise Exception(
                 "Only Sawyer, Panda, and Baxter robot environments are supported for IK "
@@ -115,5 +115,5 @@ class IKWrapper(Wrapper):
         return {
             "dpos": action[:3],
             # IK controller takes an absolute orientation in robot base frame
-            "rotation": T.quat2mat(T.quat_multiply(old_quat, action[3:6])),
+            "rotation": T.quat2mat(T.quat_multiply(old_quat, action[3:7])),
         }

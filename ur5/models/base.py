@@ -22,29 +22,18 @@ class MujocoXML(object):
             fname (str): path to the MJCF xml file.
         """
         self.file = fname
-        print("done1")
         self.folder = os.path.dirname(fname)
-        print("done2")
         self.tree = ET.parse(fname)
-        print("done3")
         self.root = self.tree.getroot()
-        print("done4")
         self.name = self.root.get("model")
-        print("done5")
         self.worldbody = self.create_default_element("worldbody")
-        print("done6")
         self.actuator = self.create_default_element("actuator")
-        print("done7")
         self.asset = self.create_default_element("asset")
-        print("done8")
         self.equality = self.create_default_element("equality")
-        print("done9")
         self.contact = self.create_default_element("contact")
-        print("done10")
         self.default = self.create_default_element("default")
-        print("done11")
         self.resolve_asset_dependency()
-        print("done12")
+    
 
     def resolve_asset_dependency(self):
         """
@@ -56,7 +45,6 @@ class MujocoXML(object):
             abs_path = os.path.abspath(self.folder)
             abs_path = os.path.join(abs_path, file)
             node.set("file", abs_path)
-        print("################## fone ")
 
 
     def create_default_element(self, name):

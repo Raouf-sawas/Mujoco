@@ -89,7 +89,7 @@ if __name__ == "__main__":
 
         # rotate the gripper so we can see it easily
         if env.mujoco_robot.name == 'sawyer':
-            env.set_robot_joint_positions([0, -1.18, 0.00, 2.18, 0.00, 0.57, 1.5708])
+            env.set_robot_joint_positions([0, -1.18, 0.00, 2.18, 0.00, 0.57])
         elif env.mujoco_robot.name == 'panda':
             env.set_robot_joint_positions([0, np.pi / 16.0, 0.00, -np.pi / 2.0 - np.pi / 3.0, 0.00, np.pi - 0.2, -np.pi/4])
         else:

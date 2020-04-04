@@ -1,7 +1,7 @@
 
 import numpy as np
 import ur5 as suite
-
+import time
 
 if __name__ == "__main__":
 
@@ -13,9 +13,7 @@ if __name__ == "__main__":
     print("Welcome to Surreal Robotics Suite v{}!".format(suite.__version__))
     print(suite.__logo__)
     print("Here is a list of environments in the suite:\n")
-    print("Here is a list of environments in the suite:\n")
-    print("Here is a list of environments in the suite:\n")
-    print("Here is a list of environments in the suite:\n")
+
 
 
     for k, env in enumerate(envs):
@@ -45,7 +43,9 @@ if __name__ == "__main__":
     env.viewer.set_camera(camera_id=0)
 
     # do visualization
-    for i in range(1001):
+    for i in range(10001):
         action = np.random.randn(env.dof)
+        time.sleep(.002)
         obs, reward, done, _ = env.step(action)
+        print(obs)
         env.render()

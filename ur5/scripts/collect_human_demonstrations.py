@@ -35,7 +35,7 @@ def collect_human_trajectory(env, device):
     obs = env.reset()
 
     # rotate the gripper so we can see it easily
-    env.set_robot_joint_positions([0, -1.18, 0.00, 2.18, 0.00, 0.57, 1.5708])
+    env.set_robot_joint_positions([0, -1.18, 0.00, 2.18, 0.00, 0.57])
 
     env.viewer.set_camera(camera_id=2)
     env.render()
@@ -230,7 +230,7 @@ if __name__ == "__main__":
         type=str,
         default=os.path.join(ur5.models.assets_root, "demonstrations"),
     )
-    parser.add_argument("--environment", type=str, default="SawyerLift")
+    parser.add_argument("--environment", type=str, default="Ur5Lift")
     parser.add_argument("--device", type=str, default="keyboard")
     args = parser.parse_args()
 

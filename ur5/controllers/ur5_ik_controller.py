@@ -185,30 +185,31 @@ class Ur5IKController(Controller):
         Returns:
             A list of size @num_joints corresponding to the joint angle solution.
         """
-
+        print([0.1] * 7)
+        print()
         if rest_poses is None:
             ik_solution = list(
                 p.calculateInverseKinematics(
                     self.ik_robot,
-                    7,
+                    6,
                     target_position,
                     targetOrientation=target_orientation,
                     restPoses=rest_poses,
-                    jointDamping=[0.1] * 8,
+                    jointDamping=[0.1] * 6,
                 )
             )
         else:
             ik_solution = list(
                 p.calculateInverseKinematics(
                     self.ik_robot,
-                    7,
+                    6,
                     target_position,
                     targetOrientation=target_orientation,
-                    lowerLimits=[-2.8973, -1.7628, -2.8973, -3.0718, -2.8973, -0.0175, -2.8973],
-                    upperLimits=[2.8973, 1.7628, 2.8973, -0.0698, 2.8973, 3.7525, 2.8973],
-                    jointRanges=[5.8, 3.5, 5.8, 3.1, 5.8, 3.8, 5.8],
+                    lowerLimits=[-2.8973, -1.7628, -2.8973, -3.0718, -2.8973, -0.0175],
+                    upperLimits=[2.8973, 1.7628, 2.8973, -0.0698, 2.8973, 3.7525],
+                    jointRanges=[5.8, 3.5, 5.8, 3.1, 5.8, 3.8],
                     restPoses=rest_poses,
-                    jointDamping=[0.1] * 8,
+                    jointDamping=[0.1] * 6,
                 )
             )
         return ik_solution
@@ -266,7 +267,7 @@ class Ur5IKController(Controller):
         )
 
         # Set default rest pose as a neutral down-position over the center of the table
-        rest_poses = [0, np.pi/6, 0.00, -(np.pi - 2*np.pi/6), 0.00, (np.pi - np.pi/6), np.pi/4]
+        rest_poses = [0, np.pi/6, 0.00, -(np.pi - 2*np.pi/6), 0.00, (np.pi - np.pi/6)]
 
         for bullet_i in range(100):
             arm_joint_pos = self.inverse_kinematics(

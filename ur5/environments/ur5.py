@@ -411,7 +411,7 @@ class Ur5Env(MujocoEnv):
         """
 
         # By default, don't do any coloring.
-        self.sim.model.site_rgba[self.eef_site_id] = [0., 0., 0., 0.]
+        self.sim.model.site_rgba[self.eef_site_id] = [0.2, 0.2, 0.2, 1]
 
     def _check_contact(self):
         """

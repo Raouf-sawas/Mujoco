@@ -1,14 +1,21 @@
 <mujoco model="ur5">
+ <option gravity="0 0 0" cone="elliptic" timestep="0.02" />
 
+    <default>
+        <light castshadow="false" diffuse="1 1 1" />
+        <joint frictionloss="1" damping="1" />
+        <camera fovy="60" />
+        <motor gear="0.8"/>
+        <velocity kv="10"/>
+        <position kp="5"/>
+    </default>
     <actuator>
-
-        <velocity ctrllimited="true" ctrlrange="-3.141 3.141" joint="joint1" kv="10.0" name="vel_right_j1"/> <!-- 8.0 kv-->
-        <velocity ctrllimited="true" ctrlrange="-3.141 3.141" joint="joint2" kv="10.0" name="vel_right_j2"/> <!-- 7.0 kv-->
-        <velocity ctrllimited="true" ctrlrange="-3.141 3.141" joint="joint3" kv="10.0" name="vel_right_j3"/> <!-- 6.0 kv-->
-        <velocity ctrllimited="true" ctrlrange="-3.141 3.141" joint="joint4" kv="10.0" name="vel_right_j4"/> <!-- 4.0 kv-->
-        <velocity ctrllimited="true" ctrlrange="-3.141 3.141" joint="joint5" kv="10.0" name="vel_right_j5"/> <!-- 2.0 kv-->
-        <velocity ctrllimited="true" ctrlrange="-3.141 3.141" joint="joint6" kv="10.0" name="vel_right_j6"/> <!-- 0.5 kv-->
-        
+        <velocity ctrllimited="true" ctrlrange="-1 1" joint="joint1" kv="10.0" name="vel_right_j1"/> <!-- 8.0 kv-->
+        <velocity ctrllimited="true" ctrlrange="-1 1" joint="joint2" kv="8.0" name="vel_right_j2"/> <!-- 7.0 kv-->
+        <velocity ctrllimited="true" ctrlrange="-1 1" joint="joint3" kv="7.0" name="vel_right_j3"/> <!-- 6.0 kv-->
+        <velocity ctrllimited="true" ctrlrange="-1 1" joint="joint4" kv="6.0" name="vel_right_j4"/> <!-- 4.0 kv-->
+        <velocity ctrllimited="true" ctrlrange="-1 1" joint="joint5" kv="4.0" name="vel_right_j5"/> <!-- 2.0 kv-->
+        <velocity ctrllimited="true" ctrlrange="-1 1" joint="joint6" kv="2.0" name="vel_right_j6"/> <!-- 0.5 kv-->
     </actuator>
     
     <asset>
@@ -32,9 +39,7 @@
     </asset>
 
     <worldbody>
-        <!--quat="0.3826834324 0 0 0.9238795325" -->
         <body name="link0" pos="0 0 0" quat="0.3826834324 0 0 0.9238795325"  >
-        	
             <body name="base" pos="0 0 0">
                 <inertial diaginertia="0.0072 0.00443333 0.00443333" mass="4" pos="0 0 0"/>
                 <body name="controller_box" pos="0 0 0">
@@ -55,77 +60,45 @@
                     <geom pos="-0.02 0 -0.29" rgba="0.2 0.2 0.2 1" size="0.18 0.31" type="cylinder" name="pedestal_col2"/>
                 </body>
             </body>
-
-
             <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="4" diaginertia="0.0072 0.00443333 0.00443333" />
             <geom name="link0_collision"  type="mesh" mesh="link0"  group="0" />
-
-
-            
-
-            <geom name="link0_visual" type="mesh" contype="0" conaffinity="0" group="1" mesh="link0_vis"  rgba="0.596 0.96 1 1"   />
-
-
-
-
-
-
+            <geom name="link0_visual" type="mesh" contype="0" conaffinity="0" group="1" mesh="link0_vis"  rgba="1 1 1 1"   />
             <body name="link1" pos="0 0 0.089159" >
                 <inertial pos="0 0 0" mass="3.7" diaginertia="0.0102675 0.0102675 0.00666" />
                 <geom name="link1_collision" type="mesh" mesh="link1"  />
-                
-                <joint name="joint1" pos="0 0 0" axis="0 0 1" />
-
+                <geom  name="link1_visual" type="mesh"  contype="0" conaffinity="0" group="1" mesh="link1_vis" rgba="0.596 0.96 1 1"/>
+                <joint name="joint1" pos="0 0 0" axis="0 0 1"  />
                 <body name="link2" pos="0 0.13585 0" quat="0.707107 0 0.707107 0">
                     <inertial pos="0 0 0.28" mass="8.393" diaginertia="0.226891 0.226891 0.0151074" />
                     <geom name="link2_collision" type="mesh" mesh="link2"  />
-                    
                     <geom  name="link2_visual" type="mesh"  contype="0" conaffinity="0" group="1" mesh="link2_vis" rgba="1 1 1 1"/>
                     <joint name="joint2" pos="0 0 0" axis="0 1 0" />
-<!-- done -->
                     <body name="link3" pos="0 -0.1197 0.425">
                         <inertial pos="0 0 0.25" mass="2.275" diaginertia="0.0494433 0.0494433 0.004095" />
                         <geom name="link3_collision" type="mesh" mesh="link3" />
-
                         <geom name="link3_visual" type="mesh" contype="0" conaffinity="0" group="1" mesh="link3_vis"  rgba="1 1 1 1"  />
                         <joint name="joint3" pos="0 0 0" axis="0 1 0" />
-<!-- done -->
                         <body name="link4" pos="0 0 0.39225" quat="0.707107 0 0.707107 0">
                             <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="1.219" diaginertia="0.21942 0.111173 0.111173" />
                             <geom name="link4_collision" type="mesh" mesh="link4" />
-                            
-
                             <geom name="link4_visual"  type="mesh"  contype="0" conaffinity="0" group="1"  mesh="link4_vis"   rgba="0.596 0.96 1 1"   />
                             <joint name="joint4" pos="0 0 0" axis="0 1 0" />
-<!-- done -->
                             <body name="link5" pos="0 0.093 0">
                                 <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="1.219" diaginertia="0.21942 0.111173 0.111173" />
                                 <geom name="link5_collision" type="mesh" mesh="link5"  />
-                                
-
-
-
-                                <geom name="link5_visual" type="mesh"  contype="0" conaffinity="0" group="1"  mesh="link5_vis" rgba="0.596 0.96 1 1"  />
+                                <geom name="link5_visual" type="mesh"  contype="0" conaffinity="0" group="1"  mesh="link5_vis" rgba="1 1 1 1"  />
                                 <joint name="joint5" pos="0 0 0" axis="0 0 1" />
-
-                               <!-- done --> 
-                                <body name="link6" pos="0 0 0.09465" quat="0.707107 0 -0.707107 0" >
+                                <body name="link6" pos="0 0 0.09465" quat="0.707107 0 -0.707107 0">
                                     <inertial pos="0 0 0" quat="0.5 0.5 -0.5 0.5" mass="0.1879" diaginertia="0.033822 0.0171365 0.0171365" />
                                     <geom name="link6_collision" type="mesh" mesh="link6"  />
-                                    
-<geom name="link6_visual" type="mesh"  contype="0" conaffinity="0" group="1"  mesh="link6_vis"   rgba="0.596 0.96 1 1"  />
-
+                                    <geom name="link6_visual" type="mesh"  contype="0" conaffinity="0" group="1"  mesh="link6_vis"   rgba="0.596 0.96 1 1"  />
                                     <joint name="joint6" pos="0 0 0" axis="0 1 0" />
-
                                     <body name="right_hand" pos="0 0.0823 0" quat="0.707107 -0.707107 0 0">
                                         <inertial pos="0 0.0823 0" quat="0.707107 -0.707107 0 0" mass="0" diaginertia="0 0 0" />
-
-                                            <site name="ee" pos="0 0 0" size="0.01 0.01 0.01" rgba="0 0 1 1" type="sphere" group="1"/>
-                                            <site name="ee_x" pos="0 0 0" size="0.005 .1"  quat="0.707105 0.707108 0 0 " rgba="1 0 0 0" type="cylinder" group="1"/>
-                                            <site name="ee_z" pos="0 0 0" size="0.005 .1" quat="0.707105 0 0 0.707108" rgba="0 0 1 0" type="cylinder" group="1"/>
-                                            <site name="ee_y" pos="0 0 0" size="0.005 .1" quat="0.707105 0 0.707108 0 " rgba="0 1 0 0" type="cylinder" group="1"/>
-                                        </body>
-
+                                        <site name="ee" pos="0 0 0" size="0.01 0.01 0.01" rgba="0 0 1 1" type="sphere" group="1"/>
+                                        <site name="ee_x" pos="0 0 0" size="0.005 .1"  quat="0.707105 0.707108 0 0 " rgba="1 0 0 0" type="cylinder" group="1"/>
+                                        <site name="ee_z" pos="0 0 0" size="0.005 .1" quat="0.707105 0 0 0.707108" rgba="0 0 1 0" type="cylinder" group="1"/>
+                                        <site name="ee_y" pos="0 0 0" size="0.005 .1" quat="0.707105 0 0.707108 0 " rgba="0 1 0 0" type="cylinder" group="1"/>
                                     </body>
                                 </body>
                             </body>
@@ -133,12 +106,6 @@
                     </body>
                 </body>
             </body>
-        
-        
-
+        </body>
     </worldbody>
-
-
-   
-
 </mujoco>
