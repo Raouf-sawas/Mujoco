@@ -1,51 +1,48 @@
- <mujoco model="base">
+<mujoco model="base">
   <compiler angle="radian" meshdir="meshes/" />
-  <option cone="elliptic" impratio="20" />
-  <size nconmax="5000" njmax="5000" />
-  
-  
+  <option cone="elliptic" gravity="0 0 0" />
   
 
   <asset>
   <texture builtin="gradient" height="256" rgb1=".9 .9 1." rgb2=".2 .3 .4" type="skybox" width="256" />
     <texture builtin="checker" height="512" name="texplane" rgb1=".2 .3 .4" rgb2=".1 0.15 0.2" type="2d" width="512" />
     <material name="floorplane" reflectance="0.5" texrepeat="1 1" texture="texplane" texuniform="true" />
-  <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/robots/ur5/meshes/base.stl" name="link0" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/robots/ur5/meshes/shoulder.stl" name="link1" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/robots/ur5/meshes/upperarm.stl" name="link2" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/robots/ur5/meshes/forearm.stl" name="link3" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/robots/ur5/meshes/wrist1.stl" name="link4" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/robots/ur5/meshes/wrist2.stl" name="link5" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/robots/ur5/meshes/wrist3.stl" name="link6" />
+  <mesh file="/home/ros/ur5/ur5/models/assets/robots/ur5/meshes/base.stl" name="link0" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/robots/ur5/meshes/shoulder.stl" name="link1" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/robots/ur5/meshes/upperarm.stl" name="link2" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/robots/ur5/meshes/forearm.stl" name="link3" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/robots/ur5/meshes/wrist1.stl" name="link4" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/robots/ur5/meshes/wrist2.stl" name="link5" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/robots/ur5/meshes/wrist3.stl" name="link6" />
         
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/robots/ur5/meshes/base.stl" name="link0_vis" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/robots/ur5/meshes/shoulder.stl" name="link1_vis" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/robots/ur5/meshes/upperarm.stl" name="link2_vis" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/robots/ur5/meshes/forearm.stl" name="link3_vis" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/robots/ur5/meshes/wrist1.stl" name="link4_vis" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/robots/ur5/meshes/wrist2.stl" name="link5_vis" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/robots/ur5/meshes/wrist3.stl" name="link6_vis" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/robots/ur5/meshes/pedestal.stl" name="pedestal" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/robots/ur5/meshes/base.stl" name="link0_vis" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/robots/ur5/meshes/shoulder.stl" name="link1_vis" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/robots/ur5/meshes/upperarm.stl" name="link2_vis" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/robots/ur5/meshes/forearm.stl" name="link3_vis" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/robots/ur5/meshes/wrist1.stl" name="link4_vis" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/robots/ur5/meshes/wrist2.stl" name="link5_vis" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/robots/ur5/meshes/wrist3.stl" name="link6_vis" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/robots/ur5/meshes/pedestal.stl" name="pedestal" />
         
-    <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_adapter_plate.stl" name="robotiq_85_gripper_adapter_plate" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_base.stl" name="robotiq_85_gripper_base" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_joint_0_L.stl" name="robotiq_85_gripper_joint_0_L" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_joint_1_L.stl" name="robotiq_85_gripper_joint_1_L" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_joint_0_R.stl" name="robotiq_85_gripper_joint_0_R" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_joint_1_R.stl" name="robotiq_85_gripper_joint_1_R" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_joint_2_L.stl" name="robotiq_85_gripper_joint_2_L" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_joint_3_L.stl" name="robotiq_85_gripper_joint_3_L" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_joint_2_R.stl" name="robotiq_85_gripper_joint_2_R" />
-        <mesh file="/home/ros/.local/lib/python3.6/site-packages/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_joint_3_R.stl" name="robotiq_85_gripper_joint_3_R" />
+    <mesh file="/home/ros/ur5/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_adapter_plate.stl" name="robotiq_85_gripper_adapter_plate" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_base.stl" name="robotiq_85_gripper_base" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_joint_0_L.stl" name="robotiq_85_gripper_joint_0_L" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_joint_1_L.stl" name="robotiq_85_gripper_joint_1_L" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_joint_0_R.stl" name="robotiq_85_gripper_joint_0_R" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_joint_1_R.stl" name="robotiq_85_gripper_joint_1_R" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_joint_2_L.stl" name="robotiq_85_gripper_joint_2_L" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_joint_3_L.stl" name="robotiq_85_gripper_joint_3_L" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_joint_2_R.stl" name="robotiq_85_gripper_joint_2_R" />
+        <mesh file="/home/ros/ur5/ur5/models/assets/grippers/meshes/robotiq_gripper/robotiq_85_gripper_joint_3_R.stl" name="robotiq_85_gripper_joint_3_R" />
     </asset>
 
   <actuator>
-  <velocity ctrllimited="true" ctrlrange="-3.141 3.141" joint="shoulder_pan_joint" kv="10.0" name="shoulder_pan_joint" /> 
-        <velocity ctrllimited="true" ctrlrange="-3.141 3.141" joint="shoulder_lift_joint" kv="8.0" name="shoulder_lift_joint" /> 
-        <velocity ctrllimited="true" ctrlrange="-3.141 3.141" joint="elbow_joint" kv="7.0" name="elbow_joint" /> 
-        <velocity ctrllimited="true" ctrlrange="-3.141 3.141" joint="wrist_1_joint" kv="6.0" name="wrist_1_joint" /> 
-        <velocity ctrllimited="true" ctrlrange="-3.141 3.141" joint="wrist_2_joint" kv="4.0" name="wrist_2_joint" /> 
-        <velocity ctrllimited="true" ctrlrange="-3.141 3.141" joint="wrist_3_joint" kv="2.0" name="wrist_3_joint" /> 
+  <velocity ctrllimited="true" ctrlrange="-1 1" joint="shoulder_pan_joint" kv="10.0" name="shoulder_pan_joint" /> 
+        <velocity ctrllimited="true" ctrlrange="-1 1" joint="shoulder_lift_joint" kv="8.0" name="shoulder_lift_joint" /> 
+        <velocity ctrllimited="true" ctrlrange="-1 1" joint="elbow_joint" kv="7.0" name="elbow_joint" /> 
+        <velocity ctrllimited="true" ctrlrange="-1 1" joint="wrist_1_joint" kv="6.0" name="wrist_1_joint" /> 
+        <velocity ctrllimited="true" ctrlrange="-1 1" joint="wrist_2_joint" kv="4.0" name="wrist_2_joint" /> 
+        <velocity ctrllimited="true" ctrlrange="-1 1" joint="wrist_3_joint" kv="2.0" name="wrist_3_joint" /> 
         
     
     <position ctrllimited="true" ctrlrange="0 0.8575" forcelimited="true" forcerange="-20 20" joint="robotiq_85_left_knuckle_joint" kp="10" name="gripper_robotiq_85_left_knuckle_joint" />
@@ -78,7 +75,6 @@
                     <inertial diaginertia="1.71363 1.27988 0.809981" mass="46.64" pos="-0.325 0 -0.38" />
                     <geom name="controller_box_col" pos="-0.325 0 -0.38" size="0.11 0.2 0.265" type="box" />
                 </body>
-                
                 <body name="pedestal_feet" pos="0 0 0">
                     <inertial diaginertia="8.16095 9.59375 15.0785" mass="167.09" pos="-0.1225 0 -0.758" />
                     <geom name="pedestal_feet_col" pos="-0.1225 0 -0.758" size="0.385 0.35 0.155" type="box" />
@@ -94,60 +90,61 @@
                 </body>
                 
             
-            <body name="base_link" pos="0 0 0">
-                <inertial diaginertia="0.0072 0.00443333 0.00443333" mass="4" pos="0 0 0" quat="0.5 0.5 -0.5 0.5" />
-                <geom conaffinity="0" contype="0" group="1" mesh="link0_vis" name="link0_visual" rgba="1 1 1 1" type="mesh" />
-                <geom mesh="link0" name="link0_collision" type="mesh" />
+            <body name="base_link" pos="0 0 0" quat="0.3826834324 0 0 0.9238795325">
+            <inertial diaginertia="0.0072 0.00443333 0.00443333" mass="4" pos="0 0 0" quat="0.5 0.5 -0.5 0.5" />
+            <geom group="0" mesh="link0" name="link0_collision" type="mesh" />
+            <geom conaffinity="0" contype="0" group="1" mesh="link0_vis" name="link0_visual" rgba="1 1 1 1" type="mesh" />
             
-                <body name="shoulder_link" pos="0 0 0.089159">
-                    <inertial diaginertia="0.0102675 0.0102675 0.00666" mass="3.7" pos="0 0 0" />
-                    <geom mesh="link1" name="link1_collision" type="mesh" />
-                    <geom conaffinity="0" contype="0" group="1" mesh="link1_vis" name="link1_visual" rgba="0.596 0.96 1 1" type="mesh" />
-                    
-                    <joint axis="0 0 1" limited="true" name="shoulder_pan_joint" pos="0 0 0" range="-3.2 3.2" />
+            <body name="shoulder_link" pos="0 0 0.089159">
+                <inertial diaginertia="0.0102675 0.0102675 0.00666" mass="3.7" pos="0 0 0" />
+                <geom mesh="link1" name="link1_collision" type="mesh" />
+                <geom conaffinity="0" contype="0" group="1" mesh="link1_vis" name="link1_visual" rgba="0.596 0.96 1 1" type="mesh" />
                 
-                    <body name="upper_arm_link" pos="0 0.13585 0">
-                        <inertial diaginertia="0.226891 0.226891 0.0151074" mass="8.393" pos="0 0 0.28" />
-                        <geom mesh="link2" name="link2_collision" type="mesh" />
-                        <geom conaffinity="0" contype="0" group="1" mesh="link2_vis" name="link2_visual" rgba="1 1 1 1" type="mesh" />
+                <joint axis="0 0 1" name="shoulder_pan_joint" pos="0 0 0" />
+                
+                <body name="upper_arm_link" pos="0 0.13585 0" quat="0.707107 0 0.707107 0">
+                    <inertial diaginertia="0.226891 0.226891 0.0151074" mass="8.393" pos="0 0 0.28" />
+                    <geom mesh="link2" name="link2_collision" type="mesh" />
+                    <geom conaffinity="0" contype="0" group="1" mesh="link2_vis" name="link2_visual" rgba="1 1 1 1" type="mesh" />
+                    
+                    <joint axis="0 1 0" name="shoulder_lift_joint" pos="0 0 0" />
+                    
+                    <body name="forearm_link" pos="0 -0.1197 0.425">
+                        <inertial diaginertia="0.0494433 0.0494433 0.004095" mass="2.275" pos="0 0 0.25" />
+                        <geom mesh="link3" name="link3_collision" type="mesh" />
+                        <geom conaffinity="0" contype="0" group="1" mesh="link3_vis" name="link3_visual" rgba="1 1 1 1" type="mesh" />
                         
-                        <joint axis="0 1 0" limited="true" name="shoulder_lift_joint" pos="0 0 0" range="-3.2 3.2" />
+                        <joint axis="0 1 0" name="elbow_joint" pos="0 0 0" />
                         
-                        <body name="forearm_link" pos="0 -0.1197 0.425">
-                            <inertial diaginertia="0.0494433 0.0494433 0.004095" mass="2.275" pos="0 0 0.25" />
-                            <geom mesh="link3" name="link3_collision" type="mesh" />
-                            <geom conaffinity="0" contype="0" group="1" mesh="link3_vis" name="link3_visual" rgba="1 1 1 1" type="mesh" />
+                        <body name="wrist_1_link" pos="0 0 0.39225" quat="0.707107 0 0.707107 0">
+                            <inertial diaginertia="0.21942 0.111173 0.111173" mass="1.219" pos="0 0 0" quat="0.5 0.5 -0.5 0.5" />
+                            <geom mesh="link4" name="link4_collision" type="mesh" />
+                            <geom conaffinity="0" contype="0" group="1" mesh="link4_vis" name="link4_visual" rgba="0.596 0.96 1 1" type="mesh" />
                             
-                            <joint axis="0 1 0" limited="true" name="elbow_joint" pos="0 0 0" range="-3.2 3.2" />
+                            <joint axis="0 1 0" name="wrist_1_joint" pos="0 0 0" />
                             
-                            <body name="wrist_1_link" pos="0 0 0.39225">
+                            <body name="wrist_2_link" pos="0 0.093 0">
                                 <inertial diaginertia="0.21942 0.111173 0.111173" mass="1.219" pos="0 0 0" quat="0.5 0.5 -0.5 0.5" />
-                                <geom mesh="link4" name="link4_collision" type="mesh" />
-                                <geom conaffinity="0" contype="0" group="1" mesh="link4_vis" name="link4_visual" rgba="0.596 0.96 1 1" type="mesh" />
+                                <geom mesh="link5" name="link5_collision" type="mesh" />
+                                <geom conaffinity="0" contype="0" group="1" mesh="link5_vis" name="link5_visual" rgba="1 1 1 1" type="mesh" />
+                               
+                               <joint axis="0 0 1" name="wrist_2_joint" pos="0 0 0" />
                                 
-                                <joint axis="0 1 0" limited="true" name="wrist_1_joint" pos="0 0 0" range="-3.2 3.2" />
-                                
-                                <body name="wrist_2_link" pos="0 0.093 0">
-                                    <inertial diaginertia="0.21942 0.111173 0.111173" mass="1.219" pos="0 0 0" quat="0.5 0.5 -0.5 0.5" />
-                                    <geom mesh="link5" name="link5_collision" type="mesh" />
-                                    <geom conaffinity="0" contype="0" group="1" mesh="link5_vis" name="link5_visual" rgba="1 1 1 1" type="mesh" />
-                                
-                                    <joint axis="0 0 1" limited="true" name="wrist_2_joint" pos="0 0 0" range="-3.2 3.2" />
+                                <body name="wrist_3_link" pos="0 0 0.09465" quat="0.707107 0 -0.707107 0">
+                                    <inertial diaginertia="0.033822 0.0171365 0.0171365" mass="0.1879" pos="0 0 0" quat="0.5 0.5 -0.5 0.5" />
+                                    <geom mesh="link6" name="link6_collision" type="mesh" />
+                                    <geom conaffinity="0" contype="0" group="1" mesh="link6_vis" name="link6_visual" rgba="0.596 0.96 1 1" type="mesh" />
                                     
-                                    <body name="wrist_3_link" pos="0 0 0.09465">
-                                        <inertial diaginertia="0.033822 0.0171365 0.0171365" mass="0.1879" pos="0 0 0" quat="0.5 0.5 -0.5 0.5" />
-                                        <geom mesh="link6" name="link6_collision" type="mesh" />
-                                        <geom conaffinity="0" contype="0" group="1" mesh="link6_vis" name="link6_visual" rgba="0.596 0.96 1 1" type="mesh" />
-                                        
-                                        <joint axis="0 1 0" limited="true" name="wrist_3_joint" pos="0 0 0" range="-3.2 3.2" />
+                                    <joint axis="0 1 0" name="wrist_3_joint" pos="0 0 0" />
+                                    
 
+
+                                        
+                                        
                                         <body name="ee_link" pos="0 0.0823 0" quat="0.707107 0 0 0.707107">
-                                            <site group="1" name="ee" pos="0 0 0" rgba="0 0 1 1" size="0.01 0.01 0.01" type="sphere" />
-                                            <site group="1" name="ee_x" pos="0 0 0" quat="0.707105 0.707108 0 0 " rgba="1 0 0 0" size="0.005 .1" type="cylinder" />
-                                            <site group="1" name="ee_z" pos="0 0 0" quat="0.707105 0 0 0.707108" rgba="0 0 1 0" size="0.005 .1" type="cylinder" />
-                                             <site group="1" name="ee_y" pos="0 0 0" quat="0.707105 0 0.707108 0 " rgba="0 1 0 0" size="0.005 .1" type="cylinder" />
+                                        <inertial diaginertia="0 0 0" mass="0" pos="0 0.0823 0" quat="0.707107 -0.707107 0 0" />                                        
                                      
-                                        <body name="robotiq_85_adapter_link" pos="0 0 0" quat="0.707107 0.707107 0 0">
+                                <body name="robotiq_85_adapter_link" pos="0 0 0" quat="0.707107 0.707107 0 0">
             <inertial diaginertia="0.001 0.001 0.001" mass="0.01" pos="0 0 0" />
             <geom group="0" mesh="robotiq_85_gripper_adapter_plate" quat="0.500048 0.5 0.499952 0.5" type="mesh" />
             <geom conaffinity="0" contype="0" group="1" mesh="robotiq_85_gripper_adapter_plate" quat="0.500048 0.5 0.499952 0.5" type="mesh" />
@@ -210,15 +207,16 @@
             </body>
         </body>
     </body>
-                                    </body>
-                                </body>
+                                
                             </body>
                         </body>
                     </body>
                 </body>
             </body>
         </body>
-    <body name="cube" pos="0.543596839089928 0.009031089075735202 0.8205583082174961" quat="-0.9956340176113603 0 0 0.09334293211090743"><geom density="5000" friction="0.5 0.005 0.0001" group="1" name="cube" pos="0 0 0" rgba="1 0 0 1" size="0.02157328559080878 0.020049154373497854 0.02055830821749599" type="box" /><site name="cube" pos="0 0 0" rgba="1 0 0 1" size="0.002 0.002 0.002" type="sphere" /><joint name="cube" type="free" /></body></worldbody>
+        </body>
+        </body>
+    <body name="cube" pos="0.5457343079589342 -0.028716964612434975 0.8209002684187475" quat="0.8121544674499166 0 0 0.5834424744575444"><geom density="5000" friction="2.0 0.005 0.0001" group="1" name="cube" pos="0 0 0" rgba="1 0 0 1" size="0.02097777723154392 0.021080760343881833 0.020900268418747533" type="box" /><site name="cube" pos="0 0 0" rgba="1 0 0 1" size="0.002 0.002 0.002" type="sphere" /><joint name="cube" type="free" /></body></worldbody>
 
   <equality>
   <connect anchor="0 0.047 -0.008" body1="robotiq_85_right_finger_link" body2="robotiq_85_right_finger_tip_link" />

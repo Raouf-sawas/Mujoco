@@ -35,9 +35,9 @@ def collect_human_trajectory(env, device):
     obs = env.reset()
 
     # rotate the gripper so we can see it easily
-    env.set_robot_joint_positions([0, -1.18, 0.00, 2.18, 0.00, 0.57])
+    env.set_robot_joint_positions([-2, 0, 0, 0, 0, 0])
 
-    env.viewer.set_camera(camera_id=2)
+    env.viewer.set_camera(camera_id=0)
     env.render()
 
     is_first = True
@@ -56,12 +56,14 @@ def collect_human_trajectory(env, device):
         )
 
         # convert into a suitable end effector action for the environment
-        current = env._right_hand_orn
+        current = env._ee_link_orn
         drotation = current.T.dot(rotation)  # relative rotation of desired from current
         dquat = T.mat2quat(drotation)
         grasp = grasp - 1.  # map 0 to -1 (open) and 1 to 0 (closed halfway)
         action = np.concatenate([dpos, dquat, [grasp]])
-
+        #action =np.asarray([5,-1,1,1,1,1,1,1])
+        #print("*************************")
+        #print(action)
         obs, reward, done, info = env.step(action)
 
         if is_first:
@@ -79,7 +81,7 @@ def collect_human_trajectory(env, device):
             env.sim.reset()
             env.sim.set_state_from_flattened(initial_mjstate)
             env.sim.forward()
-            env.viewer.set_camera(camera_id=2)
+            env.viewer.set_camera(camera_id=0)
 
         env.render()
 
@@ -118,14 +120,11 @@ def gather_demonstrations_as_hdf5(directory, out_dir):
             states (dataset) - flattened mujoco states
             joint_velocities (dataset) - joint velocities applied during demonstration
             gripper_actuations (dataset) - gripper controls applied during demonstration
-            right_dpos (dataset) - end effector delta position command for
+            ee_dpos (dataset) - end effector delta position command for
                 single arm robot or right arm
-            right_dquat (dataset) - end effector delta rotation command for
+            ee_dquat (dataset) - end effector delta rotation command for
                 single arm robot or right arm
-            left_dpos (dataset) - end effector delta position command for
-                left arm (bimanual robot only)
-            left_dquat (dataset) - end effector delta rotation command for
-                left arm (bimanual robot only)
+           
 
         demo2 (group)
         ...
@@ -157,10 +156,9 @@ def gather_demonstrations_as_hdf5(directory, out_dir):
         states = []
         joint_velocities = []
         gripper_actuations = []
-        right_dpos = []
-        right_dquat = []
-        left_dpos = []
-        left_dquat = []
+        ee_dpos = []
+        ee_dquat = []
+      
 
         for state_file in sorted(glob(state_paths)):
             dic = np.load(state_file, allow_pickle=True)
@@ -170,10 +168,9 @@ def gather_demonstrations_as_hdf5(directory, out_dir):
             for ai in dic["action_infos"]:
                 joint_velocities.append(ai["joint_velocities"])
                 gripper_actuations.append(ai["gripper_actuation"])
-                right_dpos.append(ai.get("right_dpos", []))
-                right_dquat.append(ai.get("right_dquat", []))
-                left_dpos.append(ai.get("left_dpos", []))
-                left_dquat.append(ai.get("left_dquat", []))
+                ee_dpos.append(ai.get("ee_dpos", []))
+                ee_dquat.append(ai.get("ee_dquat", []))
+                
                 
         if len(states) == 0:
             continue
@@ -183,10 +180,9 @@ def gather_demonstrations_as_hdf5(directory, out_dir):
         del states[-1]
         del joint_velocities[0]
         del gripper_actuations[0]
-        del right_dpos[0]
-        del right_dquat[0]
-        del left_dpos[0]
-        del left_dquat[0]
+        del ee_dpos[0]
+        del ee_dquat[0]
+       
 
         num_eps += 1
         ep_data_grp = grp.create_group("demo_{}".format(num_eps))
@@ -200,10 +196,9 @@ def gather_demonstrations_as_hdf5(directory, out_dir):
         ep_data_grp.create_dataset(
             "gripper_actuations", data=np.array(gripper_actuations)
         )
-        ep_data_grp.create_dataset("right_dpos", data=np.array(right_dpos))
-        ep_data_grp.create_dataset("right_dquat", data=np.array(right_dquat))
-        ep_data_grp.create_dataset("left_dpos", data=np.array(left_dpos))
-        ep_data_grp.create_dataset("left_dquat", data=np.array(left_dquat))
+        ep_data_grp.create_dataset("ee_dpos", data=np.array(ee_dpos))
+        ep_data_grp.create_dataset("ee_dquat", data=np.array(ee_dquat))
+        
 
         # copy over and rename model xml
         xml_path = os.path.join(directory, ep_directory, "model.xml")

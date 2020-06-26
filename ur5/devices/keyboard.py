@@ -4,7 +4,7 @@ Driver class for Keyboard controller.
 
 import glfw
 import numpy as np
-from ur5.devices import Device
+from robosuite.devices import Device
 from ur5.utils.transform_utils import rotation_matrix
 
 
@@ -69,7 +69,7 @@ class Keyboard(Device):
         return dict(
             dpos=dpos,
             rotation=self.rotation,
-            grasp=int(self.grasp),
+            grasp=0.7 + int(self.grasp)*1,
             reset=self._reset_state,
         )
 
@@ -77,6 +77,7 @@ class Keyboard(Device):
         """
         Key handler for key presses.
         """
+
 
         # controls for moving position
         if key == glfw.KEY_W:
@@ -111,6 +112,8 @@ class Keyboard(Device):
         elif key == glfw.KEY_V:
             drot = rotation_matrix(angle=-0.1, direction=[0., 0., 1.])[:3, :3]
             self.rotation = self.rotation.dot(drot)  # rotates z
+        print("moving position",self.pos)
+        print("moving orientation",self.rotation)
 
     def on_release(self, window, key, scancode, action, mods):
         """

@@ -207,7 +207,9 @@ class MujocoEnv(metaclass=EnvMeta):
 
         self.timestep += 1
         self._pre_action(action)
+        #print("action",action)
         end_time = self.cur_time + self.control_timestep
+        #print("step:",action)
         while self.cur_time < end_time:
             self.sim.step()
             self.cur_time += self.model_timestep
@@ -216,6 +218,7 @@ class MujocoEnv(metaclass=EnvMeta):
 
     def _pre_action(self, action):
         """Do any preprocessing before taking an action."""
+        print("_base action",action)
         self.sim.data.ctrl[:] = action
 
     def _post_action(self, action):
@@ -270,7 +273,7 @@ class MujocoEnv(metaclass=EnvMeta):
 
         # load model from xml
         self.mjpy_model = load_model_from_xml(xml_string)
-        print(xml_string)
+        print("xml_string",xml_string)
 
         self.sim = MjSim(self.mjpy_model)
         self.initialize_time(self.control_freq)

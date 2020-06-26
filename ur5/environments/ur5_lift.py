@@ -11,13 +11,14 @@ from ur5.models.tasks import TableTopTask, UniformRandomSampler
 
 
 class Ur5Lift(Ur5Env):
+
     """
-    This class corresponds to the lifting task for the Ur5 robot arm.
+    This class corresponds to the lifting task for the Sawyer robot arm.
     """
 
     def __init__(
         self,
-        gripper_type="PandaGripper",
+        gripper_type="RobotiqGripper",
         table_full_size=(0.8, 0.8, 0.8),
         table_friction=(1., 5e-3, 1e-4),
         use_camera_obs=True,
@@ -30,7 +31,7 @@ class Ur5Lift(Ur5Env):
         has_offscreen_renderer=True,
         render_collision_mesh=False,
         render_visual_mesh=True,
-        control_freq=10,
+        control_freq=100,
         horizon=1000,
         ignore_done=False,
         camera_name="frontview",
@@ -149,7 +150,7 @@ class Ur5Lift(Ur5Env):
         if self.use_indicator_object:
             self.mujoco_arena.add_pos_indicator()
 
-        # The panda robot has a pedestal, we want to align it with the table
+        # The sawyer robot has a pedestal, we want to align it with the table
         self.mujoco_arena.set_origin([0.16 + self.table_full_size[0] / 2, 0, 0])
 
         # initialize objects of interest
@@ -195,7 +196,7 @@ class Ur5Lift(Ur5Env):
         self.model.place_objects()
 
         # reset joint positions
-        init_pos = self.mujoco_robot.init_qpos
+        init_pos = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
         init_pos += np.random.randn(init_pos.shape[0]) * 0.02
         self.sim.data.qpos[self._ref_joint_pos_indexes] = np.array(init_pos)
 

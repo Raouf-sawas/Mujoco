@@ -30,6 +30,8 @@ class IKWrapper(Wrapper):
         super().__init__(env)
         if self.env.mujoco_robot.name == "ur5":
             from ur5.controllers import Ur5IKController
+            robot_jpos_getter=self._robot_jpos_getter
+            print("robot_jpos_getter",robot_jpos_getter)
 
             self.controller = Ur5IKController(
                 bullet_data_path=os.path.join(ur5.models.assets_root, "bullet_data"),
@@ -76,18 +78,19 @@ class IKWrapper(Wrapper):
                     to a quaternion d such that r * d will be the new rotation.
                 *: Controls for gripper actuation.
 
-                Note: When wrapping around a Baxter environment, the indices 0-6 inidicate the
-                right hand. Indices 7-13 indicate the left hand, and the rest (*) are the gripper
-                inputs (first right, then left).
+                Note: When wrapping around a ur5 environment, the indices 0-6 inidicate the
+                right hand.
         """
-
-        input_1 = self._make_input(action[:7], self.env._right_hand_quat)
+        
+        input_1 = self._make_input(action[:7], self.env._ee_link_quat)
+        #print("acvtinput_1ion",input_1)
         if self.env.mujoco_robot.name == "ur5":
             velocities = self.controller.get_control(**input_1)
             low_action = np.concatenate([velocities, action[7:]])
+ 
         else:
             raise Exception(
-                "Only Sawyer, Panda, and Baxter robot environments are supported for IK "
+                "Only UR5 robot environments are supported for IK "
                 "control currently."
             )
 

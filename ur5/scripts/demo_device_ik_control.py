@@ -48,7 +48,7 @@ from ur5.wrappers import IKWrapper
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--environment", type=str, default="SawyerPickPlaceCan")
+    parser.add_argument("--environment", type=str, default="Ur5Lift")
     parser.add_argument("--device", type=str, default="keyboard")
     args = parser.parse_args()
 
@@ -84,14 +84,12 @@ if __name__ == "__main__":
 
     while True:
         obs = env.reset()
-        env.viewer.set_camera(camera_id=2)
+        env.viewer.set_camera(camera_id=0)
         env.render()
 
         # rotate the gripper so we can see it easily
-        if env.mujoco_robot.name == 'sawyer':
-            env.set_robot_joint_positions([0, -1.18, 0.00, 2.18, 0.00, 0.57])
-        elif env.mujoco_robot.name == 'panda':
-            env.set_robot_joint_positions([0, np.pi / 16.0, 0.00, -np.pi / 2.0 - np.pi / 3.0, 0.00, np.pi - 0.2, -np.pi/4])
+        if env.mujoco_robot.name == 'ur5':
+            env.set_robot_joint_positions([-1.0, 1.0, 1.0, 0.0, 0.0, 0.0])
         else:
             print("Error: Script supported for Sawyer and Panda robots only!")
             sys.exit()
@@ -105,11 +103,12 @@ if __name__ == "__main__":
                 state["grasp"],
                 state["reset"],
             )
-            if reset:
-                break
 
+            if reset:
+
+                break
             # convert into a suitable end effector action for the environment
-            current = env._right_hand_orn
+            current = env._ee_link_orn
 
             # relative rotation of desired from current
             drotation = current.T.dot(rotation)

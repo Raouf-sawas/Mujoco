@@ -20,8 +20,8 @@
         <position ctrllimited="true" ctrlrange="0 1.5707" joint="robotiq_85_right_finger_tip_joint" kp="10" name="gripper_robotiq_85_right_finger_tip_joint" forcelimited="true" forcerange="-20 20"/>
     </actuator>
     <worldbody>
-        <inertial pos="0 0 0" mass="1e-6" diaginertia="1e-6 1e-6 1e-6" />
-        <body name="robotiq_85_adapter_link" pos="0.02 0 0" quat="0 0.709 0 0.706">
+        <!--inertial pos="0 0.0823 0" quat="0.707107 -0.707107 0 0" mass="0" diaginertia="0 0 0" /-->
+        <body name="robotiq_85_adapter_link" pos="0 0 0" quat="0.707107 0.707107 0 0">
             <inertial pos="0 0 0" mass="0.01" diaginertia="0.001 0.001 0.001" />
             <geom quat="0.500048 0.5 0.499952 0.5" type="mesh" group="0" mesh="robotiq_85_gripper_adapter_plate" />
             <geom quat="0.500048 0.5 0.499952 0.5" type="mesh" contype="0" conaffinity="0" group="1" mesh="robotiq_85_gripper_adapter_plate" />

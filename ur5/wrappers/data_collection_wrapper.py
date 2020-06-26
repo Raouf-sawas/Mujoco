@@ -124,14 +124,10 @@ class DataCollectionWrapper(Wrapper):
                 info["joint_velocities"] = np.array(
                     self.controller.commanded_joint_velocities
                 )
-                info["right_dpos"] = np.array(action[:3])
-                info["right_dquat"] = np.array(action[3:7])
-                if self.env.mujoco_robot.name == "sawyer":
+                info["ee_dpos"] = np.array(action[:3])
+                info["ee_dquat"] = np.array(action[3:7])
+                if self.env.mujoco_robot.name == "ur5":
                     info["gripper_actuation"] = np.array(action[7:])
-                elif self.env.mujoco_robot.name == "baxter":
-                    info["gripper_actuation"] = np.array(action[14:])
-                    info["left_dpos"] = np.array(action[7:10])  # add in second arm info
-                    info["left_dquat"] = np.array(action[10:14])
             else:
                 info = {}
                 info["joint_velocities"] = np.array(action[: self.env.mujoco_robot.dof])

@@ -9,7 +9,7 @@ from ur5.models.robots import Ur5
 
 
 class Ur5Env(MujocoEnv):
-    """Initializes a Ur5 robot environment."""
+    """Initializes a ur5 robot environment."""
 
     def __init__(
         self,
@@ -101,7 +101,7 @@ class Ur5Env(MujocoEnv):
             self.gripper = gripper_factory(self.gripper_type)
             if not self.gripper_visualization:
                 self.gripper.hide_visualization()
-            self.mujoco_robot.add_gripper("right_hand", self.gripper)
+            self.mujoco_robot.add_gripper("ee_link", self.gripper)
 
     def _reset_internal(self):
         """
@@ -112,7 +112,7 @@ class Ur5Env(MujocoEnv):
 
         if self.has_gripper:
             self.sim.data.qpos[
-                self._ref_joint_gripper_actuator_indexes
+                self._ref_gripper_joint_pos_indexes
             ] = self.gripper.init_qpos
 
     def _get_reference(self):
@@ -123,6 +123,7 @@ class Ur5Env(MujocoEnv):
 
         # indices for joints in qpos, qvel
         self.robot_joints = list(self.mujoco_robot.joints)
+        print("robot_joints",self.robot_joints)
         self._ref_joint_pos_indexes = [
             self.sim.model.get_joint_qpos_addr(x) for x in self.robot_joints
         ]
@@ -183,13 +184,13 @@ class Ur5Env(MujocoEnv):
 
     def _pre_action(self, action):
         """
-        Overrides the superclass method to actuate the robot with the
+        Overrides the superclass method to actuate the robot with the 
         passed joint velocities and gripper control.
 
         Args:
             action (numpy array): The control to apply to the robot. The first
-                @self.mujoco_robot.dof dimensions should be the desired
-                normalized joint velocities and if the robot has
+                @self.mujoco_robot.dof dimensions should be the desired 
+                normalized joint velocities and if the robot has 
                 a gripper, the next @self.gripper.dof dimensions should be
                 actuation controls for the gripper.
         """
@@ -267,7 +268,7 @@ class Ur5Env(MujocoEnv):
 
             di["eef_pos"] = np.array(self.sim.data.site_xpos[self.eef_site_id])
             di["eef_quat"] = T.convert_quat(
-                self.sim.data.get_body_xquat("right_hand"), to="xyzw"
+                self.sim.data.get_body_xquat("ee_link"), to="xyzw"
             )
 
             # add in gripper information
@@ -321,38 +322,40 @@ class Ur5Env(MujocoEnv):
         self.sim.forward()
 
     @property
-    def _right_hand_joint_cartesian_pose(self):
+    def _ee_link_joint_cartesian_pose(self):
         """
         Returns the cartesian pose of the last robot joint in base frame of robot.
         """
-        return self.pose_in_base_from_name("right_l6")
+        return self.pose_in_base_from_name("wrist_3_link")
 
     @property
-    def _right_hand_pose(self):
+    def _ee_link_pose(self):
         """
         Returns eef pose in base frame of robot.
         """
-        return self.pose_in_base_from_name("right_hand")
+        return self.pose_in_base_from_name("ee_link")
 
     @property
-    def _right_hand_quat(self):
+    def _ee_link_quat(self):
         """
         Returns eef quaternion in base frame of robot.
         """
-        return T.mat2quat(self._right_hand_orn)
+        return T.mat2quat(self._ee_link_orn)
 
     @property
-    def _right_hand_total_velocity(self):
+    def _ee_link_total_velocity(self):
         """
         Returns the total eef velocity (linear + angular) in the base frame
         as a numpy array of shape (6,)
         """
 
         # Use jacobian to translate joint velocities to end effector velocities.
-        Jp = self.sim.data.get_body_jacp("right_hand").reshape((3, -1))
+        Jp = self.sim.data.get_body_jacp("ee_link").reshape((3, -1))
+        print("Jp",Jp)
         Jp_joint = Jp[:, self._ref_joint_vel_indexes]
+        print("Jp_joint",Jp_joint)
 
-        Jr = self.sim.data.get_body_jacr("right_hand").reshape((3, -1))
+        Jr = self.sim.data.get_body_jacr("ee_link").reshape((3, -1))
         Jr_joint = Jr[:, self._ref_joint_vel_indexes]
 
         eef_lin_vel = Jp_joint.dot(self._joint_velocities)
@@ -360,40 +363,40 @@ class Ur5Env(MujocoEnv):
         return np.concatenate([eef_lin_vel, eef_rot_vel])
 
     @property
-    def _right_hand_pos(self):
+    def _ee_link_pos(self):
         """
         Returns position of eef in base frame of robot.
         """
-        eef_pose_in_base = self._right_hand_pose
+        eef_pose_in_base = self._ee_link_pose
         return eef_pose_in_base[:3, 3]
 
     @property
-    def _right_hand_orn(self):
+    def _ee_link_orn(self):
         """
         Returns orientation of eef in base frame of robot as a rotation matrix.
         """
-        eef_pose_in_base = self._right_hand_pose
+        eef_pose_in_base = self._ee_link_pose
         return eef_pose_in_base[:3, :3]
 
     @property
-    def _right_hand_vel(self):
+    def _ee_link_vel(self):
         """
         Returns velocity of eef in base frame of robot.
         """
-        return self._right_hand_total_velocity[:3]
+        return self._ee_link_total_velocity[:3]
 
     @property
-    def _right_hand_ang_vel(self):
+    def _ee_link_ang_vel(self):
         """
         Returns angular velocity of eef in base frame of robot.
         """
-        return self._right_hand_total_velocity[3:]
+        return self._ee_link_total_velocity[3:]
 
     @property
     def _joint_positions(self):
         """
         Returns a numpy array of joint positions.
-        Ur5 robots have 7 joints and positions are in rotation angles.
+        ur5 robots have 6[0, 0, 0, 0, 0, 0 joints and positions are in rotation angles.
         """
         return self.sim.data.qpos[self._ref_joint_pos_indexes]
 
@@ -401,7 +404,7 @@ class Ur5Env(MujocoEnv):
     def _joint_velocities(self):
         """
         Returns a numpy array of joint velocities.
-        Ur5 robots have 7 joints and velocities are angular velocities.
+        ur5 robots have 67 joints and velocities are angular velocities.
         """
         return self.sim.data.qvel[self._ref_joint_vel_indexes]
 
@@ -411,7 +414,7 @@ class Ur5Env(MujocoEnv):
         """
 
         # By default, don't do any coloring.
-        self.sim.model.site_rgba[self.eef_site_id] = [0.2, 0.2, 0.2, 1]
+        self.sim.model.site_rgba[self.eef_site_id] = [0., 0., 0., 0.]
 
     def _check_contact(self):
         """

@@ -4,6 +4,7 @@ NOTE: requires pybullet module.
 Run `pip install pybullet==1.9.5`.
 """
 
+
 import numpy as np
 
 try:
@@ -20,8 +21,8 @@ from ur5.controllers import Controller
 
 class Ur5IKController(Controller):
     """
-    Inverse kinematics for the Ur5 robot, using Pybullet and the urdf description
-    files. Loads a Ur5 robot into an internal Pybullet simulation, and uses it to
+    Inverse kinematics for the Sawyer robot, using Pybullet and the urdf description
+    files. Loads a sawyer robot into an internal Pybullet simulation, and uses it to
     do inverse kinematics computations.
     """
 
@@ -31,7 +32,7 @@ class Ur5IKController(Controller):
             bullet_data_path (str): base path to bullet data.
 
             robot_jpos_getter (function): function that returns the joint positions of
-                the robot to be controlled as a numpy array.
+                the robot to be controlled as a numpy array. 
         """
 
         # path to data folder of bullet repository
@@ -44,14 +45,16 @@ class Ur5IKController(Controller):
         self.setup_inverse_kinematics()
 
         # Should be in (0, 1], smaller values mean less sensitivity.
-        self.user_sensitivity = .3
+        self.user_sensitivity = .6
 
         self.sync_state()
 
-    def get_control(self, dpos, rotation):
+    def get_control(self, dpos=None, rotation=None):
         """
-        Returns joint velocities to control the robot after the target end effector
+        Returns joint velocities to control the robot after the target end effector 
         position and orientation are updated from arguments @dpos and @rotation.
+        If no arguments are provided, joint velocities will be computed based
+        on the previously recorded target.
 
         Args:
             dpos (numpy array): a 3 dimensional array corresponding to the desired
@@ -67,12 +70,14 @@ class Ur5IKController(Controller):
         # Sync joint positions for IK.
         self.sync_ik_robot(self.robot_jpos_getter())
 
-        self.commanded_joint_positions = self.joint_positions_for_eef_command(
-            dpos, rotation
-        )
+        # Compute new target joint positions if arguments are provided
+        if (dpos is not None) and (rotation is not None):
+            self.commanded_joint_positions = self.joint_positions_for_eef_command(
+                dpos, rotation
+            )
 
         # P controller from joint positions (from IK) to velocities
-        velocities = np.zeros(7)
+        velocities = np.zeros(6)
         deltas = self._get_current_error(
             self.robot_jpos_getter(), self.commanded_joint_positions
         )
@@ -101,7 +106,7 @@ class Ur5IKController(Controller):
         """
         This function is responsible for doing any setup for inverse kinematics.
         Inverse Kinematics maps end effector (EEF) poses to joint angles that
-        are necessary to achieve those poses.
+        are necessary to achieve those poses. 
         """
 
         # Set up a connection to the PyBullet simulator.
@@ -114,7 +119,8 @@ class Ur5IKController(Controller):
         )
 
         # load the urdfs
-        self.ik_robot = p.loadURDF(self.robot_urdf, (0, 0, 0.9), useFixedBase=1)
+        self.ik_robot = p.loadURDF(self.robot_urdf, 
+                     flags=p.URDF_USE_INERTIA_FROM_FILE)
 
         # Simulation will update as fast as it can in real time, instead of waiting for
         # step commands like in the non-realtime case.
@@ -126,12 +132,14 @@ class Ur5IKController(Controller):
 
         Args:
             joint_positions (list): a list or flat numpy array of joint positions.
-            simulate (bool): If True, actually use physics simulation, else
+            simulate (bool): If True, actually use physics simulation, else 
                 write to physics state directly.
             sync_last (bool): If False, don't sync the last joint angle. This
                 is useful for directly controlling the roll at the end effector.
         """
 
+
+        robot_joints=['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
         num_joints = len(joint_positions)
         if not sync_last:
             num_joints -= 1
@@ -143,8 +151,8 @@ class Ur5IKController(Controller):
                     p.POSITION_CONTROL,
                     targetVelocity=0,
                     targetPosition=joint_positions[i],
-                    force=500,
-                    positionGain=0.5,
+                    force=robot_joints[i].maxForce,
+                    maxVelocity=robot_joints[i].maxVelocity,
                     velocityGain=1.,
                 )
             else:
@@ -168,12 +176,11 @@ class Ur5IKController(Controller):
             pose_A=eef_pose_in_world, pose_A_in_B=world_pose_in_base
         )
 
-
         return T.mat2pose(eef_pose_in_base)
 
     def inverse_kinematics(self, target_position, target_orientation, rest_poses=None):
         """
-        Helper function to do inverse kinematics for a given target position and
+        Helper function to do inverse kinematics for a given target position and 
         orientation in the PyBullet world frame.
 
         Args:
@@ -185,8 +192,9 @@ class Ur5IKController(Controller):
         Returns:
             A list of size @num_joints corresponding to the joint angle solution.
         """
-        print([0.1] * 7)
-        print()
+        #robotStartPos =[-2, 0, 0, 0, 0, 0]
+
+
         if rest_poses is None:
             ik_solution = list(
                 p.calculateInverseKinematics(
@@ -194,8 +202,9 @@ class Ur5IKController(Controller):
                     6,
                     target_position,
                     targetOrientation=target_orientation,
-                    restPoses=rest_poses,
-                    jointDamping=[0.1] * 6,
+                    restPoses=[0, 0, 0, 0, 0, 0],
+                    jointDamping=[50] * 7,
+                    
                 )
             )
         else:
@@ -205,11 +214,11 @@ class Ur5IKController(Controller):
                     6,
                     target_position,
                     targetOrientation=target_orientation,
-                    lowerLimits=[-2.8973, -1.7628, -2.8973, -3.0718, -2.8973, -0.0175],
-                    upperLimits=[2.8973, 1.7628, 2.8973, -0.0698, 2.8973, 3.7525],
-                    jointRanges=[5.8, 3.5, 5.8, 3.1, 5.8, 3.8],
+                    lowerLimits=[-np.pi, -np.pi, -np.pi, -np.pi, -np.pi, -np.pi],
+                    upperLimits=[np.pi, np.pi, np.pi, np.pi, np.pi, np.pi],
+                    jointRanges=[2*np.pi,  2*np.pi, 2*np.pi, 2*np.pi, 2*np.pi, 2*np.pi],
                     restPoses=rest_poses,
-                    jointDamping=[0.1] * 6,
+                    jointDamping=[50] * 7,
                 )
             )
         return ik_solution
@@ -248,16 +257,16 @@ class Ur5IKController(Controller):
 
         self.ik_robot_target_pos += dpos * self.user_sensitivity
 
-        # this rotation accounts for offsetting the rotation between the final joint and
-        # the hand link, since the pybullet eef frame is the final joint
-        # of robot arm, whereas the mujoco eef frame is the hand link, which is rotated
-        # from the final joint by the 'quat' value for 'right_hand' specified in ur5/robot.xml
+        # this rotation accounts for rotating the end effector by 90 degrees
+        # from its rest configuration. The corresponding line in most demo
+        # scripts is: pose_in_base = T.pose2mat(pose_in_base)
 
-        rotation = rotation.dot(
-            T.rotation_matrix(angle=-np.pi/4, direction=[0., 0., 1.], point=None)[
-            :3, :3
-            ]
-        )
+        #   `env.set_robot_joint_positions([0, -1.18, 0.00, 2.18, 0.00, 0.57, 1.5708])`
+        #rotation = rotation.dot(
+        #    T.rotation_matrix(angle=-np.pi / 6, direction=[0., 0., 1.], point=None)[
+        #        :3, :3
+        #    ]
+        #)
 
         self.ik_robot_target_orn = T.mat2quat(rotation)
 
@@ -266,8 +275,7 @@ class Ur5IKController(Controller):
             (self.ik_robot_target_pos, self.ik_robot_target_orn)
         )
 
-        # Set default rest pose as a neutral down-position over the center of the table
-        rest_poses = [0, np.pi/6, 0.00, -(np.pi - 2*np.pi/6), 0.00, (np.pi - np.pi/6)]
+        rest_poses = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
         for bullet_i in range(100):
             arm_joint_pos = self.inverse_kinematics(
