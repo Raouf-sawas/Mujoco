@@ -1,6 +1,6 @@
  <mujoco model="base">
   <compiler angle="radian" meshdir="meshes/" />
-  <option cone="elliptic" impratio="20" />
+  <option cone="elliptic" gravity="0 0 0" impratio="20" />
   <size nconmax="5000" njmax="5000" />
   
   

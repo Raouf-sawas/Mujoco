@@ -112,6 +112,7 @@ class Ur5IKController(Controller):
         # Set up a connection to the PyBullet simulator.
         p.connect(p.DIRECT)
         p.resetSimulation()
+        p.setGravity(0,0,0)
 
         # get paths to urdfs
         self.robot_urdf = pjoin(
@@ -138,7 +139,12 @@ class Ur5IKController(Controller):
                 is useful for directly controlling the roll at the end effector.
         """
 
-
+                   # self.ik_robot,
+                   # i,
+                   # p.POSITION_CONTROL,
+                    #targetPosition=joint_positions[i],
+                    #force=robot_joints.maxForce,
+                    #maxVelocity=robot_joints.maxVelocity
         robot_joints=['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
         num_joints = len(joint_positions)
         if not sync_last:
@@ -148,11 +154,11 @@ class Ur5IKController(Controller):
                 p.setJointMotorControl2(
                     self.ik_robot,
                     i,
-                    p.POSITION_CONTROL,
+                     p.POSITION_CONTROL,
                     targetVelocity=0,
                     targetPosition=joint_positions[i],
-                    force=robot_joints[i].maxForce,
-                    maxVelocity=robot_joints[i].maxVelocity,
+                    force=10,
+                    positionGain=0.5,
                     velocityGain=1.,
                 )
             else:
@@ -203,7 +209,7 @@ class Ur5IKController(Controller):
                     target_position,
                     targetOrientation=target_orientation,
                     restPoses=[0, 0, 0, 0, 0, 0],
-                    jointDamping=[50] * 7,
+                    jointDamping=[0.01] * 7,
                     
                 )
             )
@@ -218,7 +224,7 @@ class Ur5IKController(Controller):
                     upperLimits=[np.pi, np.pi, np.pi, np.pi, np.pi, np.pi],
                     jointRanges=[2*np.pi,  2*np.pi, 2*np.pi, 2*np.pi, 2*np.pi, 2*np.pi],
                     restPoses=rest_poses,
-                    jointDamping=[50] * 7,
+                    jointDamping=[0.01] * 7,
                 )
             )
         return ik_solution
@@ -264,6 +270,11 @@ class Ur5IKController(Controller):
         #   `env.set_robot_joint_positions([0, -1.18, 0.00, 2.18, 0.00, 0.57, 1.5708])`
         #rotation = rotation.dot(
         #    T.rotation_matrix(angle=-np.pi / 6, direction=[0., 0., 1.], point=None)[
+        #        :3, :3
+        #    ]
+        #)
+        #rotation = rotation.dot(
+        #   T.rotation_matrix(angle=np.pi / 0.5, direction=[0., 0., 1.], point=None)[
         #        :3, :3
         #    ]
         #)
