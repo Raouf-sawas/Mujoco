@@ -196,7 +196,7 @@ class Ur5Lift(Ur5Env):
         self.model.place_objects()
 
         # reset joint positions
-        init_pos = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+        init_pos = np.array([2.0, -1.0, 0.0, 1.0, 1.0,2.0])
         init_pos += np.random.randn(init_pos.shape[0]) * 0.02
         self.sim.data.qpos[self._ref_joint_pos_indexes] = np.array(init_pos)
 

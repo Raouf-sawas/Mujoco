@@ -25,12 +25,12 @@
         <velocity ctrllimited="true" ctrlrange="-1 1"  joint="wrist_1_joint" kv="70" name="wrist_1_joint"/> 
         <velocity ctrllimited="true" ctrlrange="-1 1"  joint="wrist_2_joint" kv="30" name="wrist_2_joint"/> 
         <velocity ctrllimited="true" ctrlrange="-1 1"  joint="wrist_3_joint" kv="20" name="wrist_3_joint"/> <!-- 0.5 kv-->
-        <!--position ctrllimited="true" ctrlrange="-3.1 3.14" forcelimited="true" forcerange="-20 20" joint="shoulder_pan_joint" kp="20" name="shoulder_pan_joint" />
-       <position ctrllimited="true" ctrlrange="-3.10 3.1" forcelimited="true" forcerange="-20 20" joint="shoulder_lift_joint" kp="20" name="shoulder_lift_joint" />
-        <position ctrllimited="true" ctrlrange="-3.1 3.1" forcelimited="true" forcerange="-20 20" joint="elbow_joint" kp="20" name="elbow_joint" />
-        <position ctrllimited="true" ctrlrange="-3.10 3.1" forcelimited="true" forcerange="-20 20" joint="wrist_1_joint" kp="20" name="wrist_1_joint" />
-        <position ctrllimited="true" ctrlrange="-3.10 3.1" forcelimited="true" forcerange="-20 20" joint="wrist_2_joint" kp="20" name="wrist_2_joint" />
-        <position ctrllimited="true" ctrlrange="-3.10 3.1" forcelimited="true" forcerange="-20 20" joint="wrist_3_joint" kp="20" name="wrist_3_joint" /-->
+    <!--position ctrllimited="true" ctrlrange="-3.1 3.14" forcelimited="true" forcerange="-500 500" joint="shoulder_pan_joint" kp="10" name="shoulder_pan_joint" />
+       <position ctrllimited="true" ctrlrange="-3.10 3.1" forcelimited="true" forcerange="-500 500" joint="shoulder_lift_joint" kp="10" name="shoulder_lift_joint" />
+        <position ctrllimited="true" ctrlrange="-3.1 3.1" forcelimited="true" forcerange="-500 500" joint="elbow_joint" kp="10" name="elbow_joint" />
+        <position ctrllimited="true" ctrlrange="-3.10 3.1" forcelimited="true" forcerange="-500 500" joint="wrist_1_joint" kp="10" name="wrist_1_joint" />
+        <position ctrllimited="true" ctrlrange="-3.10 3.1" forcelimited="true" forcerange="-500 500" joint="wrist_2_joint" kp="10" name="wrist_2_joint" />
+        <position ctrllimited="true" ctrlrange="-3.10 3.1" forcelimited="true" forcerange="-500 500" joint="wrist_3_joint" kp="10" name="wrist_3_joint" /--> 
     
     </actuator>
     
@@ -124,12 +124,8 @@
                                         
                                         <joint name="wrist_3_joint"  limited="true" range="-3.2 3.2"   pos="0 0 0" axis="0 1 0" />
 
-                                        <body name="ee_link" pos="0 0.0823 0" quat="0.707107 0 0 0.707107">
+                                        <body name="ee_link" pos="0 0.0823 0" quat="0.707107 0 0 0.707107" >
                                             <site name="ee" pos="0 0 0" size="0.01 0.01 0.01" rgba="0 0 1 1" type="sphere" group="1"/>
-                                            <site name="ee_x" pos="0 0 0" size="0.005 .1"  quat="0.707105 0.707108 0 0 " rgba="1 0 0 0" type="cylinder" group="1"/>
-                                            <site name="ee_y" pos="0 0 0" size="0.005 .1" quat="0.707105 0 0 0.707108" rgba="0 0 1 0" type="cylinder" group="1"/>
-                                             <site name="ee_z" pos="0 0 0" size="0.005 .1" quat="0.707105 0 0.707108 0 " rgba="0 1 0 0" type="cylinder" group="1"/>
-                                     
                                         </body>
                                     </body>
                                 </body>

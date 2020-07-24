@@ -20,7 +20,7 @@ class Ur5Env(MujocoEnv):
         has_offscreen_renderer=True,
         render_collision_mesh=False,
         render_visual_mesh=True,
-        control_freq=10,
+        control_freq=100,
         horizon=1000,
         ignore_done=False,
         use_camera_obs=False,
@@ -29,48 +29,6 @@ class Ur5Env(MujocoEnv):
         camera_width=256,
         camera_depth=False,
     ):
-        """
-        Args:
-            gripper_type (str): type of gripper, used to instantiate
-                gripper models from gripper factory.
-
-            gripper_visualization (bool): True if using gripper visualization.
-                Useful for teleoperation.
-
-            use_indicator_object (bool): if True, sets up an indicator object that
-                is useful for debugging.
-
-            has_renderer (bool): If true, render the simulation state in
-                a viewer instead of headless mode.
-
-            has_offscreen_renderer (bool): True if using off-screen rendering.
-
-            render_collision_mesh (bool): True if rendering collision meshes
-                in camera. False otherwise.
-
-            render_visual_mesh (bool): True if rendering visual meshes
-                in camera. False otherwise.
-
-            control_freq (float): how many control signals to receive
-                in every second. This sets the amount of simulation time
-                that passes between every action input.
-
-            horizon (int): Every episode lasts for exactly @horizon timesteps.
-
-            ignore_done (bool): True if never terminating the environment (ignore @horizon).
-
-            use_camera_obs (bool): if True, every observation includes a
-                rendered image.
-
-            camera_name (str): name of camera to be rendered. Must be
-                set if @use_camera_obs is True.
-
-            camera_height (int): height of camera frame.
-
-            camera_width (int): width of camera frame.
-
-            camera_depth (bool): True if rendering RGB-D, and RGB otherwise.
-        """
 
         self.has_gripper = gripper_type is not None
         self.gripper_type = gripper_type
@@ -326,7 +284,7 @@ class Ur5Env(MujocoEnv):
         """
         Returns the cartesian pose of the last robot joint in base frame of robot.
         """
-        return self.pose_in_base_from_name("wrist_3_link")
+        return self.pose_in_base_from_name("ee_link")
 
     @property
     def _ee_link_pose(self):
@@ -416,8 +374,4 @@ class Ur5Env(MujocoEnv):
         # By default, don't do any coloring.
         self.sim.model.site_rgba[self.eef_site_id] = [0., 0., 0., 0.]
 
-    def _check_contact(self):
-        """
-        Returns True if the gripper is in contact with another object.
-        """
-        return False
+ 

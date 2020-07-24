@@ -1,6 +1,5 @@
 """
 NOTE: requires pybullet module.
-
 Run `pip install pybullet==1.9.5`.
 """
 
@@ -30,7 +29,6 @@ class Ur5IKController(Controller):
         """
         Args:
             bullet_data_path (str): base path to bullet data.
-
             robot_jpos_getter (function): function that returns the joint positions of
                 the robot to be controlled as a numpy array. 
         """
@@ -40,6 +38,8 @@ class Ur5IKController(Controller):
 
         # returns current robot joint positions
         self.robot_jpos_getter = robot_jpos_getter
+        print("self.robot_jpos_getter",self.robot_jpos_getter)
+
 
         # Do any setup needed for Inverse Kinematics.
         self.setup_inverse_kinematics()
@@ -55,13 +55,11 @@ class Ur5IKController(Controller):
         position and orientation are updated from arguments @dpos and @rotation.
         If no arguments are provided, joint velocities will be computed based
         on the previously recorded target.
-
         Args:
             dpos (numpy array): a 3 dimensional array corresponding to the desired
                 change in x, y, and z end effector position.
             rotation (numpy array): a rotation matrix of shape (3, 3) corresponding
                 to the desired orientation of the end effector.
-
         Returns:
             velocities (numpy array): a flat array of joint velocity commands to apply
                 to try and achieve the desired input control.
@@ -82,7 +80,7 @@ class Ur5IKController(Controller):
             self.robot_jpos_getter(), self.commanded_joint_positions
         )
         for i, delta in enumerate(deltas):
-            velocities[i] = -2. * delta  # -2. * delta
+            velocities[i] = -1. * delta  # -2. * delta
         velocities = self.clip_joint_velocities(velocities)
 
         self.commanded_joint_velocities = velocities
@@ -112,7 +110,7 @@ class Ur5IKController(Controller):
         # Set up a connection to the PyBullet simulator.
         p.connect(p.DIRECT)
         p.resetSimulation()
-        p.setGravity(0,0,0)
+        #p.setGravity(0,0,0)
 
         # get paths to urdfs
         self.robot_urdf = pjoin(
@@ -120,8 +118,7 @@ class Ur5IKController(Controller):
         )
 
         # load the urdfs
-        self.ik_robot = p.loadURDF(self.robot_urdf, 
-                     flags=p.URDF_USE_INERTIA_FROM_FILE)
+        self.ik_robot = p.loadURDF(self.robot_urdf, (0, 0, 0.9), useFixedBase=1)
 
         # Simulation will update as fast as it can in real time, instead of waiting for
         # step commands like in the non-realtime case.
@@ -130,7 +127,6 @@ class Ur5IKController(Controller):
     def sync_ik_robot(self, joint_positions, simulate=False, sync_last=True):
         """
         Force the internal robot model to match the provided joint angles.
-
         Args:
             joint_positions (list): a list or flat numpy array of joint positions.
             simulate (bool): If True, actually use physics simulation, else 
@@ -147,30 +143,31 @@ class Ur5IKController(Controller):
                     #maxVelocity=robot_joints.maxVelocity
         robot_joints=['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
         num_joints = len(joint_positions)
+        #print("num_joints",num_joints)
         if not sync_last:
             num_joints -= 1
         for i in range(num_joints):
             if simulate:
                 p.setJointMotorControl2(
-                    self.ik_robot,
-                    i,
-                     p.POSITION_CONTROL,
+                    bodyIndex=self.ik_robot,
+                    jointIndex=i,
+                    controlMode=p.POSITION_CONTROL,
                     targetVelocity=0,
                     targetPosition=joint_positions[i],
-                    force=10,
-                    positionGain=0.5,
+                    force=500,
+                    positionGain=0.6,
                     velocityGain=1.,
                 )
             else:
-                p.resetJointState(self.ik_robot, i, joint_positions[i], 0)
+                p.resetJointState(self.ik_robot, i, joint_positions[i])
 
     def ik_robot_eef_joint_cartesian_pose(self):
         """
         Returns the current cartesian pose of the last joint of the ik robot with respect to the base frame as
         a (pos, orn) tuple where orn is a x-y-z-w quaternion
         """
-        eef_pos_in_world = np.array(p.getLinkState(self.ik_robot, 6)[0])
-        eef_orn_in_world = np.array(p.getLinkState(self.ik_robot, 6)[1])
+        eef_pos_in_world = np.array(p.getLinkState(self.ik_robot, 5)[0])
+        eef_orn_in_world = np.array(p.getLinkState(self.ik_robot, 5)[1])
         eef_pose_in_world = T.pose2mat((eef_pos_in_world, eef_orn_in_world))
 
         base_pos_in_world = np.array(p.getBasePositionAndOrientation(self.ik_robot)[0])
@@ -188,17 +185,15 @@ class Ur5IKController(Controller):
         """
         Helper function to do inverse kinematics for a given target position and 
         orientation in the PyBullet world frame.
-
         Args:
             target_position: A tuple, list, or numpy array of size 3 for position.
             target_orientation: A tuple, list, or numpy array of size 4 for
                 a orientation quaternion.
             rest_poses: (optional) A list of size @num_joints to favor ik solutions close by.
-
         Returns:
             A list of size @num_joints corresponding to the joint angle solution.
         """
-        #robotStartPos =[-2, 0, 0, 0, 0, 0]
+        robotresetPos =[2, -1, 0, 1, 1,2]
 
 
         if rest_poses is None:
@@ -208,8 +203,8 @@ class Ur5IKController(Controller):
                     6,
                     target_position,
                     targetOrientation=target_orientation,
-                    restPoses=[0, 0, 0, 0, 0, 0],
-                    jointDamping=[0.01] * 7,
+                    restPoses=robotresetPos,
+                    jointDamping=[0.01] * 7
                     
                 )
             )
@@ -223,8 +218,8 @@ class Ur5IKController(Controller):
                     lowerLimits=[-np.pi, -np.pi, -np.pi, -np.pi, -np.pi, -np.pi],
                     upperLimits=[np.pi, np.pi, np.pi, np.pi, np.pi, np.pi],
                     jointRanges=[2*np.pi,  2*np.pi, 2*np.pi, 2*np.pi, 2*np.pi, 2*np.pi],
-                    restPoses=rest_poses,
-                    jointDamping=[0.01] * 7,
+                    restPoses=robotresetPos,
+                    jointDamping=[0.01] * 7
                 )
             )
         return ik_solution
@@ -232,10 +227,8 @@ class Ur5IKController(Controller):
     def bullet_base_pose_to_world_pose(self, pose_in_base):
         """
         Convert a pose in the base frame to a pose in the world frame.
-
         Args:
             pose_in_base: a (pos, orn) tuple.
-
         Returns:
             pose_in world: a (pos, orn) tuple.
         """
@@ -254,9 +247,7 @@ class Ur5IKController(Controller):
         """
         This function runs inverse kinematics to back out target joint positions
         from the provided end effector command.
-
         Same arguments as @get_control.
-
         Returns:
             A list of size @num_joints corresponding to the target joint angles.
         """
@@ -268,16 +259,12 @@ class Ur5IKController(Controller):
         # scripts is: pose_in_base = T.pose2mat(pose_in_base)
 
         #   `env.set_robot_joint_positions([0, -1.18, 0.00, 2.18, 0.00, 0.57, 1.5708])`
-        #rotation = rotation.dot(
-        #    T.rotation_matrix(angle=-np.pi / 6, direction=[0., 0., 1.], point=None)[
-        #        :3, :3
-        #    ]
-        #)
-        #rotation = rotation.dot(
-        #   T.rotation_matrix(angle=np.pi / 0.5, direction=[0., 0., 1.], point=None)[
-        #        :3, :3
-        #    ]
-        #)
+
+        rotation = rotation.dot(
+            T.rotation_matrix(angle=-np.pi/2, direction=[0., 1., 0.], point=None)[
+            :3, :3
+            ]
+        )
 
         self.ik_robot_target_orn = T.mat2quat(rotation)
 
@@ -286,7 +273,7 @@ class Ur5IKController(Controller):
             (self.ik_robot_target_pos, self.ik_robot_target_orn)
         )
 
-        rest_poses = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        rest_poses = [2, -1, 0, 1, 1,2]
 
         for bullet_i in range(100):
             arm_joint_pos = self.inverse_kinematics(
@@ -300,11 +287,9 @@ class Ur5IKController(Controller):
         """
         Returns an array of differences between the desired joint positions and current
         joint positions. Useful for PID control.
-
         Args:
             current: the current joint positions.
             set_point: the joint positions that are desired as a numpy array.
-
         Returns:
             the current error in the joint positions.
         """

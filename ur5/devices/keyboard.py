@@ -7,7 +7,6 @@ import numpy as np
 from robosuite.devices import Device
 from ur5.utils.transform_utils import rotation_matrix
 
-
 class Keyboard(Device):
     """A minimalistic driver class for a Keyboard."""
 
@@ -69,7 +68,7 @@ class Keyboard(Device):
         return dict(
             dpos=dpos,
             rotation=self.rotation,
-            grasp=0.7 + int(self.grasp)*1,
+            grasp=int(self.grasp)*1.7,
             reset=self._reset_state,
         )
 
@@ -77,7 +76,6 @@ class Keyboard(Device):
         """
         Key handler for key presses.
         """
-
 
         # controls for moving position
         if key == glfw.KEY_W:

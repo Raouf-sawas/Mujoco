@@ -27,4 +27,4 @@ class Ur5(Robot):
 
     @property
     def init_qpos(self):
-        return np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+        return np.array([2, -1, 0, 1, 1,2])

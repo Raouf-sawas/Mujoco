@@ -59,7 +59,7 @@ if __name__ == "__main__":
         use_camera_obs=False,
         gripper_visualization=True,
         reward_shaping=True,
-        control_freq=100
+        control_freq=10
     )
 
     # enable controlling the end effector directly instead of using joint velocities
@@ -84,12 +84,12 @@ if __name__ == "__main__":
 
     while True:
         obs = env.reset()
-        env.viewer.set_camera(camera_id=0)
+        #env.viewer.set_camera(camera_id=0)
         env.render()
 
         # rotate the gripper so we can see it easily
         if env.mujoco_robot.name == 'ur5':
-            env.set_robot_joint_positions([-1.0, 1.0, 1.0, 0.0, 0.0, 0.0])
+            env.set_robot_joint_positions([2, -1, 0, 1, 1,2])
         else:
             print("Error: Script supported for Sawyer and Panda robots only!")
             sys.exit()
@@ -118,5 +118,6 @@ if __name__ == "__main__":
             grasp = grasp - 1.
 
             action = np.concatenate([dpos, dquat, [grasp]])
+            
             obs, reward, done, info = env.step(action)
             env.render()

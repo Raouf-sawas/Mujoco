@@ -12,7 +12,7 @@ def register_env(target_class):
 
 
 def make(env_name, *args, **kwargs):
-    print("1- looking for ENV")
+
     
     """Try to get the equivalent functionality of gym.make in a sloppy way."""
     if env_name not in REGISTERED_ENVS:
@@ -57,40 +57,7 @@ class MujocoEnv(metaclass=EnvMeta):
         camera_width=256,
         camera_depth=False,
     ):
-        """
-        Args:
 
-            has_renderer (bool): If true, render the simulation state in 
-                a viewer instead of headless mode.
-
-            has_offscreen_renderer (bool): True if using off-screen rendering.
-
-            render_collision_mesh (bool): True if rendering collision meshes 
-                in camera. False otherwise.
-
-            render_visual_mesh (bool): True if rendering visual meshes 
-                in camera. False otherwise.
-
-            control_freq (float): how many control signals to receive 
-                in every simulated second. This sets the amount of simulation time 
-                that passes between every action input.
-
-            horizon (int): Every episode lasts for exactly @horizon timesteps.
-
-            ignore_done (bool): True if never terminating the environment (ignore @horizon).
-
-            use_camera_obs (bool): if True, every observation includes a 
-                rendered image.
-
-            camera_name (str): name of camera to be rendered. Must be 
-                set if @use_camera_obs is True.
-
-            camera_height (int): height of camera frame.
-
-            camera_width (int): width of camera frame.
-
-            camera_depth (bool): True if rendering RGB-D, and RGB otherwise.
-        """
         print( "Initializes a Mujoco Environment.")
 
         self.has_renderer = has_renderer
@@ -301,38 +268,7 @@ class MujocoEnv(metaclass=EnvMeta):
 
         # necessary to refresh MjData
         self.sim.forward()
-
-    def find_contacts(self, geoms_1, geoms_2):
-        """
-        Finds contact between two geom groups.
-
-        Args:
-            geoms_1: a list of geom names (string)
-            geoms_2: another list of geom names (string)
-
-        Returns:
-            iterator of all contacts between @geoms_1 and @geoms_2
-        """
-        for contact in self.sim.data.contact[0 : self.sim.data.ncon]:
-            # check contact geom in geoms
-            c1_in_g1 = self.sim.model.geom_id2name(contact.geom1) in geoms_1
-            c2_in_g2 = self.sim.model.geom_id2name(contact.geom2) in geoms_2
-            # check contact geom in geoms (flipped)
-            c2_in_g1 = self.sim.model.geom_id2name(contact.geom2) in geoms_1
-            c1_in_g2 = self.sim.model.geom_id2name(contact.geom1) in geoms_2
-            if (c1_in_g1 and c2_in_g2) or (c1_in_g2 and c2_in_g1):
-                yield contact
-
-    def _check_contact(self):
-        """Returns True if gripper is in contact with an object."""
-        return False
-
-    def _check_success(self):
-        """
-        Returns True if task has been completed.
-        """
-        return False
-
+    
     def _destroy_viewer(self):
         # if there is an active viewer window, destroy it
         if self.viewer is not None:

@@ -100,7 +100,7 @@ class IKWrapper(Wrapper):
             if i + 1 < self.action_repeat:
                 velocities = self.controller.get_control()
                 if self.env.mujoco_robot.name == "ur5":
-                    low_action = np.concatenate([velocities, action[6:]])
+                    low_action = np.concatenate([velocities, action[7:]])
                 else:
                     raise Exception(
                         "Only Sawyer, Panda, and Baxter robot environments are supported for IK "

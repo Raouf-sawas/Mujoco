@@ -1,0 +1,12 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/ros/ros2_mara_ws/install/lib/python3.6/site-packages",
+        "/home/ros/.local/lib/python3.6/site-packages",
+        "/opt/ros/dashing/lib/python3.6/site-packages",
+        "/home/ros/ros2_mara_ws/install/lib/python3/dist-packages",
+        "/home/ros/.local/lib/python3.6/site-packages",
+        "/home/ros/ros2_mara_ws/install/lib/python3/dist-packages",
+        "/home/ros/ros2_mara_ws/install/lib/python3/dist-packages"
+    ],
+    "ros.distro": "dashing"
+}
